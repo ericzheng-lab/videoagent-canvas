@@ -1,28 +1,54 @@
 "use client";
 
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, useReactFlow } from "@xyflow/react";
 import { useState } from "react";
-import { apiGenerate, pollStatus } from "@/lib/api";
+import { useCanvasStore } from "@/lib/store";
+import { apiGenerate } from "@/lib/api";
 
-export function GenerateNode({ data, id }: { data: any; id: string }) {
+export function GenerateNode({ id }: { id: string }) {
   const [model, setModel] = useState("nano-banana-pro-4k");
   const [aspect, setAspect] = useState("1:1");
   const [status, setStatus] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const setNodeData = useCanvasStore((s) => s.setNodeData);
+  const { getEdges } = useReactFlow();
 
   const handleGenerate = async () => {
+    const edges = getEdges();
+    const { images, prompt } = useCanvasStore.getState().getInputData(edges, id);
+
+    if (!prompt && images.length === 0) {
+      setStatus("❌ 请连接参考图或提示词节点");
+      return;
+    }
+
     setStatus("⏳ 提交中...");
-    setImageUrl("");
+    setNodeData(id, { status: "pending" });
+
     try {
-      const res = await apiGenerate({ mode: "nano-banana-generate", model, aspect, prompt: "" });
+      const payload: any = {
+        mode: model === "midjourney" ? "mj-imagine" : "nano-banana-generate",
+        prompt: prompt || "generate based on reference images",
+        aspect,
+        noWait: true,
+      };
+
+      if (images.length > 0) payload.images = images;
+
+      const res = await apiGenerate(payload);
+
       if (res.success && res.images?.[0]) {
-        setImageUrl(res.images[0].url);
         setStatus("✅ 完成");
+        setNodeData(id, { status: "completed", resultUrl: res.images[0].url });
+      } else if (res.success && res.taskId) {
+        setStatus("⏳ 任务已提交: " + res.taskId);
+        setNodeData(id, { status: "submitted", taskId: res.taskId, model });
       } else {
         setStatus("❌ " + (res.error || "生成失败"));
+        setNodeData(id, { status: "error" });
       }
     } catch (err: any) {
       setStatus("❌ " + err.message);
+      setNodeData(id, { status: "error" });
     }
   };
 
@@ -44,9 +70,6 @@ export function GenerateNode({ data, id }: { data: any; id: string }) {
         生成
       </button>
       {status && <div className="mt-2 text-xs text-gray-400">{status}</div>}
-      {imageUrl && (
-        <img src={imageUrl} className="mt-2 w-full rounded-lg border border-[#2a2a3e]" />
-      )}
     </div>
   );
 }
