@@ -24,9 +24,9 @@ export default function CanvasPage() {
   );
 
   return (
-    <div className="w-screen h-screen flex flex-col">
+    <div className="w-full h-screen flex flex-col" style={{ height: '100dvh' }}>
       {showToolbar && <CanvasToolbar />}
-      <div className="flex-1">
+      <div className="flex-1" style={{ minHeight: 0 }}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
