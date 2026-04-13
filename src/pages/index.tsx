@@ -9,10 +9,7 @@ const Background = dynamic(() => import("@xyflow/react").then((m) => m.Backgroun
 
 import "@xyflow/react/dist/style.css";
 import { nodeTypes } from "@/components/nodes";
-import { useCanvasStore } from "@/lib/store";
-
 export default function CanvasPage() {
-  const { addInitialNodes } = useCanvasStore();
   const [nodes, setNodes] = useState<any[]>([]);
   const [edges, setEdges] = useState<any[]>([]);
   const setNodesRef = useRef(setNodes);
