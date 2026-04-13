@@ -26,7 +26,7 @@ export function GenerateNode({ id }: { id: string }) {
 
     try {
       const payload: any = {
-        mode: model === "midjourney" ? "mj-imagine" : "nano-banana-generate",
+        mode: model === "midjourney" ? "mj-imagine" : model === "seedream" ? "seedream-generate" : "nano-banana-generate",
         prompt: prompt || "generate based on reference images",
         aspect,
         noWait: true,
@@ -60,6 +60,7 @@ export function GenerateNode({ id }: { id: string }) {
       <select value={model} onChange={(e) => setModel(e.target.value)} className="w-full bg-[#1a1a2e] border border-[#2a2a3e] rounded p-1.5 text-sm mb-2">
         <option value="nano-banana-pro-4k">NanoBanana ¥2.00</option>
         <option value="midjourney">Midjourney ¥1.00</option>
+        <option value="seedream">Seedream ¥1.50</option>
       </select>
       <select value={aspect} onChange={(e) => setAspect(e.target.value)} className="w-full bg-[#1a1a2e] border border-[#2a2a3e] rounded p-1.5 text-sm mb-2">
         <option value="1:1">1:1</option>
