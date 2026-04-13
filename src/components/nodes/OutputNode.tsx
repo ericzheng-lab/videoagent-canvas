@@ -1,6 +1,6 @@
 "use client";
 
-import { Handle, Position, useReactFlow } from "@xyflow/react";
+import { Handle, Position } from "@xyflow/react";
 import { useEffect, useState } from "react";
 import { useCanvasStore } from "@/lib/store";
 import { Download } from "lucide-react";
@@ -8,28 +8,12 @@ import { Download } from "lucide-react";
 export function OutputNode({ id }: { id: string }) {
   const [imageUrl, setImageUrl] = useState("");
   const nodeData = useCanvasStore((s) => s.getNodeData(id));
-  const { getEdges, getNode } = useReactFlow();
 
-  // Watch for resultUrl from connected generate node
   useEffect(() => {
-    const edges = getEdges();
-    const sourceEdges = edges.filter((e: any) => e.target === id);
-
-    for (const edge of sourceEdges) {
-      const sourceNode = getNode(edge.source);
-      if (sourceNode) {
-        const sourceData = useCanvasStore.getState().getNodeData(sourceNode.id);
-        if (sourceData.resultUrl) {
-          setImageUrl(sourceData.resultUrl);
-          return;
-        }
-      }
-    }
-
-    if (nodeData.resultUrl) {
+    if (nodeData.resultUrl && nodeData.resultUrl !== imageUrl) {
       setImageUrl(nodeData.resultUrl);
     }
-  }, [nodeData.resultUrl, getEdges, getNode]);
+  }, [nodeData.resultUrl]);
 
   return (
     <div className="p-3 min-w-[240px]">
