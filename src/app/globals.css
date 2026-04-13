@@ -1,26 +1,56 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0f0f1a;
+  --foreground: #e5e5e5;
+  --card-bg: #1a1a2e;
+  --border: #2a2a3e;
+  --accent: #6366f1;
+  --accent-hover: #818cf8;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.react-flow__node {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  color: var(--foreground) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.react-flow__handle {
+  background: var(--accent) !important;
+  border: 2px solid var(--border) !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.react-flow__handle:hover {
+  background: var(--accent-hover) !important;
+}
+
+.react-flow__edge-path {
+  stroke: var(--accent) !important;
+  stroke-width: 2 !important;
+}
+
+.react-flow__controls button {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.react-flow__controls button:hover {
+  background: var(--border) !important;
+}
+
+.react-flow__background {
+  background: var(--background) !important;
 }
