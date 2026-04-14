@@ -3,54 +3,337 @@
 @tailwind utilities;
 
 :root {
-  --background: #0f0f1a;
-  --foreground: #e5e5e5;
-  --card-bg: #1a1a2e;
-  --border: #2a2a3e;
-  --accent: #6366f1;
-  --accent-hover: #818cf8;
+  --background: #0a0a14;
+  --foreground: #e8e8f0;
+  --card-bg: #16162a;
+  --card-bg-hover: #1e1e38;
+  --border: #2a2a48;
+  --border-light: #3a3a5c;
+  --accent: #7c6cf0;
+  --accent-hover: #9d8ef6;
+  --accent-glow: rgba(124, 108, 240, 0.15);
+  --text-primary: #f0f0f8;
+  --text-secondary: #a0a0c0;
+  --text-muted: #6a6a8a;
+  --success: #4ade80;
+  --danger: #f87171;
+  --warning: #fbbf24;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* ─── React Flow Node Cards ─── */
 .react-flow__node {
   background: var(--card-bg) !important;
   border: 1px solid var(--border) !important;
-  border-radius: 12px !important;
-  color: var(--foreground) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+  border-radius: 16px !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(124, 108, 240, 0.05) !important;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease !important;
 }
 
+.react-flow__node:hover {
+  border-color: var(--accent) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-glow) !important;
+}
+
+/* ─── Handles (connection dots) ─── */
 .react-flow__handle {
   background: var(--accent) !important;
-  border: 2px solid var(--border) !important;
-  width: 14px !important;
-  height: 14px !important;
+  border: 3px solid var(--card-bg) !important;
+  width: 16px !important;
+  height: 16px !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 8px rgba(124, 108, 240, 0.3) !important;
 }
 
 .react-flow__handle:hover {
   background: var(--accent-hover) !important;
+  box-shadow: 0 0 12px rgba(157, 142, 246, 0.5) !important;
 }
 
+/* ─── Edges ─── */
 .react-flow__edge-path {
   stroke: var(--accent) !important;
   stroke-width: 2 !important;
 }
 
+/* ─── Controls ─── */
+.react-flow__controls {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid var(--border) !important;
+}
+
 .react-flow__controls button {
   background: var(--card-bg) !important;
-  border: 1px solid var(--border) !important;
-  color: var(--foreground) !important;
+  border: none !important;
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--text-primary) !important;
+  width: 36px !important;
+  height: 36px !important;
 }
 
 .react-flow__controls button:hover {
-  background: var(--border) !important;
+  background: var(--card-bg-hover) !important;
 }
 
+.react-flow__controls button svg {
+  fill: var(--text-primary) !important;
+}
+
+/* ─── Background ─── */
 .react-flow__background {
   background: var(--background) !important;
+}
+
+/* ─── Select & Option (dark theme fix) ─── */
+select {
+  background-color: #12122a !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 8px 10px !important;
+  font-size: 13px !important;
+  outline: none !important;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3' stroke='%23a0a0c0' stroke-width='1.5' fill='none'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 10px center !important;
+}
+
+select:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+
+option {
+  background-color: #12122a !important;
+  color: var(--text-primary) !important;
+  padding: 8px !important;
+}
+
+/* ─── Textarea ─── */
+textarea {
+  background-color: #12122a !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 8px !important;
+  padding: 10px !important;
+  font-size: 13px !important;
+  outline: none !important;
+  resize: none !important;
+  line-height: 1.5 !important;
+}
+
+textarea:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+
+textarea::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* ─── Input ─── */
+input[type="file"] {
+  display: none;
+}
+
+/* ─── Toolbar ─── */
+.canvas-toolbar {
+  background: linear-gradient(180deg, #16162a 0%, #12122a 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.toolbar-btn:hover {
+  background: var(--card-bg-hover);
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+/* ─── Node Header Badges ─── */
+.node-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.node-header-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.node-header-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+}
+
+/* ─── Generate Button ─── */
+.btn-generate {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: white;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.btn-generate:hover {
+  background: linear-gradient(135deg, #7c7ef7, #9d6ffa);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-generate:active {
+  transform: translateY(0);
+}
+
+/* ─── Status Messages ─── */
+.status-msg {
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+/* ─── Image Thumbnails ─── */
+.img-thumb {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.img-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-thumb .remove-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border: none;
+  border-radius: 0 8px 0 6px;
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Output Image ─── */
+.output-img {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.download-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--card-bg-hover);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.download-link:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+/* ─── Empty State ─── */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* ─── Icon Buttons ─── */
+.icon-btn {
+  padding: 8px;
+  border-radius: 8px;
+  background: #12122a;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  background: var(--card-bg-hover);
+  border-color: var(--accent);
+  color: var(--text-primary);
 }

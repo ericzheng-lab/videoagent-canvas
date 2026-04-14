@@ -1,15 +1,32 @@
 "use client";
 
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, useReactFlow } from "@xyflow/react";
+import { useMemo } from "react";
 import { useCanvasStore } from "@/lib/store";
 import { Download } from "lucide-react";
 
 export function OutputNode({ id }: { id: string }) {
-  const resultUrl = useCanvasStore((s) => s.getNodeData(id).resultUrl || "");
+  const { getEdges } = useReactFlow();
+  const myData = useCanvasStore((s) => s.nodeData[id]);
+
+  const resultUrl = useMemo(() => {
+    const own = myData?.resultUrl || "";
+    if (own) return own;
+    try {
+      const edges = getEdges();
+      const incoming = edges.filter((e) => e.target === id);
+      for (const edge of incoming) {
+        const sourceData = useCanvasStore.getState().nodeData[edge.source];
+        if (sourceData?.resultUrl) return sourceData.resultUrl;
+      }
+    } catch {}
+    return "";
+  }, [myData, id]);
 
   return (
     <div className="p-3 min-w-[240px]">
       <Handle type="target" position={Position.Left} />
+      <Handle type="source" position={Position.Right} />
       <div className="text-sm font-semibold mb-2">🖼️ 输出</div>
       {resultUrl ? (
         <div>

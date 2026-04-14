@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-let nodeIdCounter = 1;
+let nodeIdCounter = 5;
 const nextId = () => `node_${nodeIdCounter++}`;
 
 export interface NodeData {
@@ -27,7 +27,7 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
   nodeData: {},
 
   addNode: (type) => {
-    // This is handled by the page component
+    // Placeholder: actual add logic is in CanvasPage via setNodes
   },
 
   setNodeData: (id, data) =>
@@ -45,17 +45,23 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
     const images: string[] = [];
     let prompt = "";
 
-    edges.forEach((edge) => {
-      if (edge.target !== nodeId) return;
-      const sourceId = edge.source;
-      const sourceNode = nodeData[sourceId];
-      if (!sourceNode) return;
+    const collectFromNode = (targetId: string) => {
+      edges.forEach((edge) => {
+        if (edge.target !== targetId) return;
+        const sourceId = edge.source;
+        const sourceNode = nodeData[sourceId];
+        if (!sourceNode) return;
 
-      if (sourceNode.images) images.push(...sourceNode.images);
-      if (sourceNode.prompt) prompt += sourceNode.prompt;
-      if (sourceNode.resultUrl) images.push(sourceNode.resultUrl);
-    });
+        if (sourceNode.images) images.push(...sourceNode.images);
+        if (sourceNode.prompt) prompt += sourceNode.prompt;
+        if (sourceNode.resultUrl) images.push(sourceNode.resultUrl);
 
+        // If source is an output node that proxies another result, recurse upstream
+        collectFromNode(sourceId);
+      });
+    };
+
+    collectFromNode(nodeId);
     return { images, prompt };
   },
 
